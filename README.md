@@ -93,9 +93,6 @@ python data_validation.py
 
 # Validate specific directory
 python data_validation.py "path/to/dataset"
-
-# Create a YAML template if missing
-python data_validation.py --create-yaml
 ```
 
 ### Model Training
@@ -105,6 +102,9 @@ Train YOLO models with GPU acceleration and customizable settings.
 ```bash
 # Interactive training with prompts
 python model_training.py
+
+# Train YOLOv8 with specific parameters
+python model_training.py --version v8 --epochs 100 --batch_size 16 --img_size 640
 
 # Specify model size and batch size
 python model_training.py --size m --batch 8
