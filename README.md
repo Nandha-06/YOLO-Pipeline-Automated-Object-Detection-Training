@@ -1,59 +1,80 @@
-# YOLO Model Training Template
+# YOLO-Pipeline: Automated Object Detection Training Framework
 
-Simple tools for YOLO dataset preparation, validation, and training.
+An end-to-end pipeline for automating YOLO object detection model training workflows, from data acquisition to model training and evaluation.
 
-## Install
+## Features
+
+- **Data Acquisition**: Download datasets from Google Drive with automatic extraction and validation
+- **Data Validation**: Verify dataset structure and create YAML configuration files
+- **Model Training**: Train various YOLO versions (v5-v11) with GPU acceleration
+- **Model Size Selection**: Choose from nano, small, medium, large, or xlarge model variants
+- **GPU Optimization**: Automatic GPU detection and memory optimization
+- **Real-time Monitoring**: Track GPU usage during training
+
+## Installation
+
 ```bash
+# Clone the repository
+git clone https://github.com/Nandha-06/YOLO-Pipeline-Automated-Object-Detection-Training.git
+cd YOLO-Pipeline-Automated-Object-Detection-Training
+
+# Install dependencies
 pip install -r requirements.txt
+
+# Install PyTorch with CUDA support (for GPU acceleration)
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 ```
 
-## Data Ingestion
+## Quick Start
 
-Download files and folders from Google Drive using gdown.
+Run the complete pipeline with a single command:
 
-### Interactive Mode
+```bash
+python main.py
+```
+
+This will guide you through:
+1. Downloading and extracting the dataset
+2. Validating the dataset structure
+3. Training a YOLO model with your preferred settings
+
+## Usage Guide
+
+### Data Ingestion
+
+Download and prepare datasets from Google Drive.
+
+#### Interactive Mode
 ```bash
 python data_ingestion.py
 ```
 The script will prompt you for a Google Drive URL and automatically validate the downloaded dataset.
 
-### Command Line Mode
-#### Download a file
+#### Command Line Mode
 ```bash
+# Download a file
 python data_ingestion.py "https://drive.google.com/file/d/FILEID/view"
-```
 
-#### Download a file with custom output path
-```bash
+# Download a file with custom output path
 python data_ingestion.py "https://drive.google.com/file/d/FILEID/view" -o "data/file.zip"
-```
 
-#### Download a folder
-```bash
+# Download a folder
 python data_ingestion.py "https://drive.google.com/drive/folders/FOLDERID" -f
-```
 
-#### Download multiple files
-```bash
+# Download multiple files
 python data_ingestion.py "URL1" "URL2" "URL3"
-```
 
-#### Download without extracting zip files
-```bash
+# Download without extracting zip files
 python data_ingestion.py "URL" -n
-```
 
-#### Download and create YAML if missing
-```bash
+# Download and create YAML if missing
 python data_ingestion.py "URL" -y
-```
 
-#### Keep zip files after extraction
-```bash
+# Keep zip files after extraction
 python data_ingestion.py "URL" -k
 ```
 
-### Options
+#### Options
 - `-q` Quiet mode
 - `-o` Output path
 - `-f` Folder mode
@@ -62,91 +83,66 @@ python data_ingestion.py "URL" -k
 - `-y` Create YAML template if missing (disabled by default)
 - `-k` Keep zip files after extraction (by default, zip files are deleted)
 
-## Data Validation
+### Data Validation
 
 Validate if your dataset has the necessary files and structure for YOLO training.
 
-### Usage
 ```bash
+# Validate using last extracted directory
 python data_validation.py
-```
-Running without arguments will automatically use the last extracted directory from data_ingestion.py.
 
-If you want to specify a different directory:
-```bash
+# Validate specific directory
 python data_validation.py "path/to/dataset"
-```
 
-#### Create a YAML template if missing
-```bash
+# Create a YAML template if missing
 python data_validation.py --create-yaml
 ```
 
-### What it validates:
-- Dataset directory structure
-- Presence of YAML configuration file
-- Image files in expected locations
-- Label files in expected locations
+### Model Training
 
-The script provides a summary of validation results and recommendations for fixing issues.
+Train YOLO models with GPU acceleration and customizable settings.
 
-## Model Training
-
-Train a YOLO model using the validated dataset.
-
-### Supported YOLO Versions
-
-The training script supports multiple YOLO versions:
-
-- **YOLOv5** - Reliable and widely used
-- **YOLOv6** - Efficient industrial object detector by Meituan
-- **YOLOv7** - State-of-the-art object detector
-- **YOLOv8** - Latest version with segmentation support
-- **YOLOv9** - Latest from WongKinYiu with GELAN architecture 
-- **YOLOv10** - From Ultralytics with improved performance
-- **YOLO11** - Latest from Ultralytics, most advanced
-- **YOLOX** - Through super-gradients framework
-
-### Interactive Mode
 ```bash
+# Interactive training with prompts
 python model_training.py
-```
-The script will prompt you to choose a YOLO version and set hyperparameters.
 
-### Command Line Mode
-```bash
-python model_training.py --version v8 --epochs 100 --batch_size 16 --img_size 640
+# Specify model size and batch size
+python model_training.py --size m --batch 8
+
+# Specify dataset directory and number of epochs
+python model_training.py --data_dir "path/to/dataset" --epochs 100
+
+# Train with specific image size
+python model_training.py --img_size 640
+
+# Force GPU usage and monitor performance
+python model_training.py --force-gpu --monitor-gpu
 ```
 
-### Options
-- `--version` YOLO version to use (v5, v6, v7, v8, v9, v10, v11, x)
-- `--data_dir` Path to dataset directory (uses last extracted directory by default)
+#### Options
+- `--size` Model size (n, s, m, l, x)
+- `--batch` Batch size
 - `--epochs` Number of training epochs
-- `--batch_size` Batch size for training
-- `--img_size` Input image size
-- `--lr` Learning rate
-- `--force_clone` Force re-cloning the repository if it exists
-- `--interactive` Use interactive mode
+- `--img_size` Image size for training
+- `--data_dir` Dataset directory
+- `--weights` Pre-trained weights file
+- `--device` Device to train on (0 for GPU, cpu for CPU)
+- `--verbose` Enable verbose output
+- `--force-gpu` Force GPU usage even if checks fail
+- `--monitor-gpu` Monitor GPU usage during training
 
-### What it does:
-1. Clones the selected YOLO repository from GitHub
-2. Installs required dependencies
-3. Finds or creates the dataset YAML configuration
-4. Sets up training with specified hyperparameters
-5. Runs the training process
+## System Requirements
 
-## Complete Workflow Example
+- Python 3.8+
+- CUDA-compatible GPU (recommended)
+- NVIDIA drivers and CUDA toolkit
+- PyTorch with CUDA support
 
-```bash
-# Step 1: Download dataset from Google Drive, extract it, and delete the zip file
-python data_ingestion.py "https://drive.google.com/file/d/FILEID/view"
+## License
 
-# Step 2: Run validation (uses last extracted directory automatically)
-python data_validation.py
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-# Step 3: Create YAML if needed
-python data_validation.py --create-yaml
+## Acknowledgments
 
-# Step 4: Train YOLO model (uses the same dataset directory)
-python model_training.py --version v11 --epochs 100
-``` 
+- [Ultralytics](https://github.com/ultralytics/ultralytics) for YOLOv8
+- [WongKinYiu](https://github.com/WongKinYiu) for YOLOv7/YOLOv9 
