@@ -4,7 +4,7 @@ An end-to-end pipeline for automating YOLO object detection model training workf
 
 ## Features
 
-- **Data Acquisition**: Download datasets from Google Drive with automatic extraction and validation
+- **Data Ingestion**: Download datasets from Google Drive with automatic extraction and validation
 - **Data Validation**: Verify dataset structure and create YAML configuration files
 - **Model Training**: Train various YOLO versions (v5-v11) with GPU acceleration
 - **Model Size Selection**: Choose from nano, small, medium, large, or xlarge model variants
