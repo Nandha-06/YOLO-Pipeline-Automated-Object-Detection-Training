@@ -1,148 +1,162 @@
-# YOLO-Pipeline: Automated Object Detection Training Framework
+# YOLO Workflow Automation
 
-An end-to-end pipeline for automating YOLO object detection model training workflows, from data acquisition to model training and evaluation.
+A comprehensive Python-based workflow for YOLO (You Only Look Once) object detection model training. This project provides an end-to-end solution for downloading, validating, and training YOLO models with minimal user intervention.
 
 ## Features
 
 - **Data Ingestion**: Download datasets from Google Drive with automatic extraction and validation
-- **Data Validation**: Verify dataset structure and create YAML configuration files
-- **Model Training**: Train various YOLO versions (v5-v11) with GPU acceleration
-- **Model Size Selection**: Choose from nano, small, medium, large, or xlarge model variants
-- **GPU Optimization**: Automatic GPU detection and memory optimization
-- **Real-time Monitoring**: Track GPU usage during training
+- **Data Validation**: Comprehensive dataset validation for YOLO training requirements
+- **Model Training**: Support for multiple YOLO versions (v5-v11) with GPU optimization
+- **Automated Workflow**: Single-command execution of the entire training pipeline
+- **GPU Monitoring**: Real-time GPU usage monitoring during training
+- **Cross-Platform**: Works on Windows, Linux, and macOS
+
+## Prerequisites
+
+- Python 3.8 or higher
+- CUDA-compatible GPU (recommended)
+- Google Drive access (for dataset downloads)
+- Basic understanding of YOLO object detection
 
 ## Installation
 
+1. Clone the repository:
 ```bash
-# Clone the repository
-git clone https://github.com/Nandha-06/YOLO-Pipeline-Automated-Object-Detection-Training.git
-cd YOLO-Pipeline-Automated-Object-Detection-Training
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Install PyTorch with CUDA support (for GPU acceleration)
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+git clone <repository-url>
+cd <repository-name>
 ```
 
-## Quick Start
+2. Install required dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-Run the complete pipeline with a single command:
+## Project Structure
 
+```
+.
+├── data_ingestion.py    # Handles dataset downloading and extraction
+├── data_validation.py   # Validates dataset structure and content
+├── model_training.py    # Manages YOLO model training process
+├── main.py             # Main workflow orchestrator
+└── README.md           # Project documentation
+```
+
+## Usage
+
+### Basic Usage
+
+Run the complete workflow with a single command:
 ```bash
 python main.py
 ```
 
-This will guide you through:
-1. Downloading and extracting the dataset
-2. Validating the dataset structure
-3. Training a YOLO model with your preferred settings
+The workflow will guide you through:
+1. Dataset download from Google Drive
+2. Dataset validation
+3. Model training configuration
+4. Training execution
 
-## Usage Guide
+### Advanced Usage
 
-### Data Ingestion
-
-Download and prepare datasets from Google Drive.
-
-#### Interactive Mode
+#### Data Ingestion
 ```bash
-python data_ingestion.py
-```
-The script will prompt you for a Google Drive URL and automatically validate the downloaded dataset.
-
-#### Command Line Mode
-```bash
-# Download a file
-python data_ingestion.py "https://drive.google.com/file/d/FILEID/view"
-
-# Download a file with custom output path
-python data_ingestion.py "https://drive.google.com/file/d/FILEID/view" -o "data/file.zip"
-
-# Download a folder
-python data_ingestion.py "https://drive.google.com/drive/folders/FOLDERID" -f
-
-# Download multiple files
-python data_ingestion.py "URL1" "URL2" "URL3"
-
-# Download without extracting zip files
-python data_ingestion.py "URL" -n
-
-# Download and create YAML if missing
-python data_ingestion.py "URL" -y
-
-# Keep zip files after extraction
-python data_ingestion.py "URL" -k
+python data_ingestion.py [options]
 ```
 
-#### Options
-- `-q` Quiet mode
-- `-o` Output path
-- `-f` Folder mode
-- `-n` No extraction (don't extract zip files)
-- `-v` Validate dataset after downloading
-- `-y` Create YAML template if missing (disabled by default)
-- `-k` Keep zip files after extraction (by default, zip files are deleted)
+Options:
+- `--urls`: Google Drive URLs or file IDs
+- `--output`: Output path for downloaded files
+- `--folder`: Download entire folder
+- `--quiet`: Suppress download progress
+- `--no-extract`: Do not extract zip files
+- `--validate`: Validate dataset after downloading
+- `--create-yaml`: Create YAML template if missing
+- `--keep-zip`: Keep zip files after extraction
 
-### Data Validation
-
-Validate if your dataset has the necessary files and structure for YOLO training.
-
+#### Data Validation
 ```bash
-# Validate using last extracted directory
-python data_validation.py
-
-# Validate specific directory
-python data_validation.py "path/to/dataset"
+python data_validation.py [data_dir] [options]
 ```
 
-### Model Training
+Options:
+- `--create-yaml`: Create a template YAML file if missing
 
-Train YOLO models with GPU acceleration and customizable settings.
-
+#### Model Training
 ```bash
-# Interactive training with prompts
-python model_training.py
-
-# Train YOLOv8 with specific parameters
-python model_training.py --version v8 --epochs 100 --batch_size 16 --img_size 640
-
-# Specify model size and batch size
-python model_training.py --size m --batch 8
-
-# Specify dataset directory and number of epochs
-python model_training.py --data_dir "path/to/dataset" --epochs 100
-
-# Train with specific image size
-python model_training.py --img_size 640
-
-# Force GPU usage and monitor performance
-python model_training.py --force-gpu --monitor-gpu
+python model_training.py [options]
 ```
 
-#### Options
-- `--size` Model size (n, s, m, l, x)
-- `--batch` Batch size
-- `--epochs` Number of training epochs
-- `--img_size` Image size for training
-- `--data_dir` Dataset directory
-- `--weights` Pre-trained weights file
-- `--device` Device to train on (0 for GPU, cpu for CPU)
-- `--verbose` Enable verbose output
-- `--force-gpu` Force GPU usage even if checks fail
-- `--monitor-gpu` Monitor GPU usage during training
+Options:
+- `--data_dir`: Dataset directory
+- `--epochs`: Number of training epochs
+- `--batch`: Batch size
+- `--img_size`: Image size
+- `--weights`: Pre-trained weights file
+- `--size`: Model size (n/s/m/l/x)
+- `--device`: Device to train on (e.g., 0 for GPU, cpu for CPU)
+- `--verbose`: Enable verbose output
+- `--force-gpu`: Force GPU usage even if checks fail
+- `--monitor-gpu`: Monitor GPU usage during training
+- `--project`: Project directory for saving results
+- `--name`: Experiment name
 
-## System Requirements
+## Supported YOLO Versions
 
-- Python 3.8+
-- CUDA-compatible GPU (recommended)
-- NVIDIA drivers and CUDA toolkit
+- YOLOv5
+- YOLOv6
+- YOLOv7
+- YOLOv8
+- YOLOv9
+- YOLOv10
+- YOLOv11
+
+## Dataset Requirements
+
+The workflow expects datasets in YOLO format with the following structure:
+```
+dataset/
+├── images/           # Training images
+├── labels/           # Label files
+├── train/            # Training split
+├── valid/            # Validation split
+└── test/             # Test split (optional)
+```
+
+## GPU Requirements
+
+- CUDA-compatible GPU
+- NVIDIA drivers
 - PyTorch with CUDA support
+- Minimum 4GB VRAM (8GB recommended)
+
+## Troubleshooting
+
+1. **GPU Not Detected**
+   - Ensure CUDA is properly installed
+   - Check PyTorch CUDA version matches system CUDA version
+   - Verify NVIDIA drivers are up to date
+
+2. **Dataset Validation Failures**
+   - Check dataset structure matches YOLO requirements
+   - Ensure image and label files are properly paired
+   - Verify YAML configuration file exists and is valid
+
+3. **Training Issues**
+   - Reduce batch size if out of memory
+   - Try smaller model size
+   - Check dataset quality and size
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+[Your chosen license]
 
 ## Acknowledgments
 
-- [Ultralytics](https://github.com/ultralytics/ultralytics) for YOLOv8
-- [WongKinYiu](https://github.com/WongKinYiu) for YOLOv7/YOLOv9 
+- Ultralytics for YOLOv5 and YOLOv8
+- YOLOv6, YOLOv7, YOLOv9, YOLOv10, and YOLOv11 teams
+- PyTorch team for the deep learning framework
