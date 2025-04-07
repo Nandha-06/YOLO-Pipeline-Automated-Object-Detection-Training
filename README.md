@@ -22,8 +22,8 @@ A comprehensive Python-based workflow for YOLO (You Only Look Once) object detec
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd <repository-name>
+git clone https://github.com/Nandha-06/YOLO-Pipeline-Automated-Object-Detection-Training.git
+cd YOLO-Pipeline-Automated-Object-Detection-Training
 ```
 
 2. Install required dependencies:
